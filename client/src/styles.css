@@ -1,0 +1,134 @@
+/* styles.css */
+
+/* General Container */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+/* Login page */
+.login {
+    margin-top: 100px;
+}  
+.login-image {
+    display: block;
+    margin: 0 auto 20px; /* Centers the image and adds space below */
+    max-width: 200px; /* Set the maximum width of the image */
+    width: 100%; /* Ensures the image scales down proportionally */
+    height: auto; /* Maintains the aspect ratio */
+}
+
+/*register page */
+.register {
+    margin-top: 100px;
+ 
+
+}
+
+
+  /* Header */
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2.5em; /* Slightly larger and more playful */
+    color: #FF6347; /* A bright, kid-friendly color (tomato) */
+    font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; /* Playful, informal fonts */
+    text-shadow: 2px 2px 4px #FFA07A; /* Adds a fun shadow effect */
+    transform: rotate(-2deg); /* Slight tilt for a quirky look */
+    letter-spacing: 2px; /* Adds some space between the letters */
+}
+
+.icon-image {
+    display: block;
+    margin: 0 auto 20px; /* Centers the image and adds space below */
+    max-width: 100px; /* Set the maximum width of the image */
+    width: 50%; /* Ensures the image scales down proportionally */
+    height: auto; /* Maintains the aspect ratio */
+
+}
+
+  /* Form */
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+  }
+  
+  select {
+    padding: 10px;
+    font-size: 1em;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Playground List */
+
+  
+  .list-group-item {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .list-group-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .list-group-item h5 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #06232c;
+  }
+  
+  .list-group-item p {
+    margin: 5px 0 0;
+    font-size: 1em;
+    color: #028648;
+  }
+  
+
+.list-group-item a {
+  color: rgb(0, 4, 255);
+  text-decoration: none;
+  font-size: 20px;
+  display:inline-block ;/* Ensures it’s rendered as a block element */
+  padding: 5px; /* Ensure padding around the text */
+  height: auto; /* Allow height to adjust based on content */
+  margin: 0; /* Remove margin to ensure proper alignment */
+  width: auto; /* Adjust width based on content */
+}
+
+  
+.list-group-item a:hover {
+    text-decoration: underline;
+  }

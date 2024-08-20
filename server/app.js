@@ -4,11 +4,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 
+
+const { Folder, Playground } = require('./models');
+
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Logging middleware to check request body
 app.use((req, res, next) => {

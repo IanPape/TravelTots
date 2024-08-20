@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles.css';
 
-
-
 const Login = ({ setToken }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +18,11 @@ const Login = ({ setToken }) => {
 
       console.log('Login successful:', response.data);
 
-      setToken(response.data.token);
+      const token = response.data.token;
+      setToken(token);
+
+      // Store the token in local storage
+      localStorage.setItem('token', token);
 
       // Redirect to homepage after successful login
       navigate('/home');

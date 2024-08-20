@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Home from './components/Home';
 import PlaygroundPage from './components/PlaygroundPage';
 import './styles.css';
+import SavedPlaygrounds from './components/SavedPlaygrounds'; 
+import Navbar from './components/Navbar'; 
 
 
 const App = () => {
@@ -12,11 +14,13 @@ const App = () => {
 
   return (
     <Router>
+       <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="/home" element={token ? <Home /> : <Login setToken={setToken} />} />
-        <Route path="/playgrounds" element={token ? <PlaygroundPage /> : <Login setToken={setToken} />} /> {/* PlaygroundPage route */}
+        <Route path="/playgrounds" element={token ? <PlaygroundPage /> : <Login setToken={setToken} />} /> 
+        <Route path="/saved-playgrounds" element={token ? <SavedPlaygrounds /> : <Login setToken={setToken} />} /> 
         <Route path="/" element={
           token ? (
             <div>

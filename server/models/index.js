@@ -15,6 +15,7 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+// Read all model files in the directory and import them
 fs
   .readdirSync(__dirname)
   .filter(file => {
@@ -22,11 +23,14 @@ fs
   })
   .forEach(file => {
     const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    console.log(`Loading model: ${model.name}`);  // Add this log
     db[model.name] = model;
   });
 
+// Set up associations if any model has an associate method
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
+    console.log(`Associating model: ${modelName}`);  // Add this log
     db[modelName].associate(db);
   }
 });

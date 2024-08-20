@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { User } = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const axios = require('axios'); // Import Axios
+const axios = require('axios');
+const { User, Folder, Playground, FolderPlaygrounds, sequelize } = require('../models'); // Import sequelize here
 require('dotenv').config();
-
 console.log('Using API key:', process.env.GOOGLE_API_KEY);
 
 // Register a new user
@@ -156,6 +155,79 @@ router.post('/playgrounds', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch playgrounds' });
   }
 });
+
+//route for saving playgrounds, creating folders, and retrieving saved playgrounds
+
+router.post('/folders', async (req, res) => {
+  const { userId, name } = req.body;
+  try {
+      const folder = await Folder.create({ user_id: userId, name });
+      res.status(201).json(folder);
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/playgrounds/save', async (req, res) => { // Ensure this is marked as async
+  console.log('POST /playgrounds/save called');
+  console.log('Request body:', req.body);
+
+  const { folderId, playground } = req.body;
+
+  try {
+    // Check if the playground already exists in the database based on name and location
+    let existingPlayground = await Playground.findOne({ 
+      where: { 
+        name: playground.name,
+        latitude: playground.geometry.location.lat,
+        longitude: playground.geometry.location.lng
+      } 
+    });
+
+    if (!existingPlayground) {
+      // Create the playground in the database if it doesn't exist
+      existingPlayground = await Playground.create({
+        name: playground.name,
+        latitude: playground.geometry.location.lat,
+        longitude: playground.geometry.location.lng,
+        map_link: playground.mapsLink,
+      });
+    }
+
+    // Create association between folder and playground
+    await FolderPlaygrounds.create({
+      folder_id: folderId,
+      playground_id: existingPlayground.id
+    });
+
+    res.status(201).json({ message: 'Playground saved successfully' });
+  } catch (error) {
+    console.error('Error saving playground:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/folders/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log(`Fetching folders for user ID: ${userId}`);  // Add this log
+
+  try {
+    const folders = await Folder.findAll({
+      where: { user_id: userId },
+      include: [{ model: sequelize.models.Playground, as: 'playgrounds' }]
+  });
+      console.log(`Found folders: ${JSON.stringify(folders)}`);  // Add this log
+      res.status(200).json(folders);
+  } catch (error) {
+      console.error('Error fetching folders:', error);  // Add this log
+      res.status(500).json({ error: 'Error fetching folders' });
+  }
+});
+
+
+
+
+
 
 
 module.exports = router;

@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "psql -U ian -d traveltots_db -f ./db/schema.sql && node index.js",
+    "start": "psql -U ian -d traveltots_db -f ./db/schema.sql && node app.js",
     "dev": "nodemon --exec \"psql -U ian -d traveltots_db -f ./db/schema.sql && node app.js\""
   },
   "keywords": [],

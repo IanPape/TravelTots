@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@svgr/plugin-svgo": "^6.0.0",
-    "@svgr/webpack": "^6.0.0",
+    "@supabase/supabase-js": "^2.45.2",
+    "@svgr/plugin-svgo": "6.0.0",
+    "@svgr/webpack": "6.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -25,8 +26,8 @@
     "nth-check": "^2.1.1",
     "css-select": "^4.1.3",
     "svgo": "^2.8.0",
-    "@svgr/plugin-svgo": "^6.0.0",
-    "@svgr/webpack": "^6.0.0",
+    "@svgr/plugin-svgo": "6.0.0",
+    "@svgr/webpack": "6.0.0",
     "postcss": "^8.4.40",
     "resolve-url-loader": "^4.0.0"
   },
@@ -48,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
   }
 }

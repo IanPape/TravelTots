@@ -24,8 +24,8 @@ const SavedPlaygrounds = () => {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = parseJwt(token);
-      console.log('Decoded Token:', decodedToken); // Add this line
-      return decodedToken ? decodedToken.userId : null;
+      console.log('Decoded Token:', decodedToken);
+      return decodedToken ? decodedToken.id : null; // Use 'id' instead of 'userId'
     }
     return null;
   };

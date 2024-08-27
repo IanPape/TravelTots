@@ -19,20 +19,20 @@ const CreateFolder = ({ onFolderCreated, onFolderDeleted }) => {
     }
   };
 
-  const getUserIdFromToken = () => {
+  cconst getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = parseJwt(token);
-      return decodedToken ? decodedToken.userId : null;
+      return decodedToken ? decodedToken.id : null; // Use 'id' instead of 'userId'
     }
     return null;
   };
+  
 
   const handleCreateFolder = () => {
-    const userId = getUserIdFromToken();
     const token = localStorage.getItem('token'); // Get the token from localStorage
-
-    axios.post('https://traveltotsbackend.onrender.com/api/folders', { userId, name: folderName }, {
+  
+    axios.post('https://traveltotsbackend.onrender.com/api/folders', { name: folderName }, {
       headers: {
         Authorization: `Bearer ${token}` // Include the token in the request headers
       }
@@ -47,6 +47,7 @@ const CreateFolder = ({ onFolderCreated, onFolderDeleted }) => {
       alert('Failed to create folder.');
     });
   };
+  
 
   const handleDeleteFolder = (folderId) => {
     const token = localStorage.getItem('token'); // Get the token from localStorage

@@ -7,6 +7,24 @@ const { User, Folder, Playground, FolderPlaygrounds, sequelize } = require('../m
 require('dotenv').config();
 console.log('Using API key:', process.env.GOOGLE_API_KEY);
 
+// Middleware to authenticate and extract user ID from JWT
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Expecting "Bearer <token>"
+  
+  if (!token) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403); // Forbidden
+    }
+    req.user = user; // Attach the decoded user info to the request object
+    next();
+  });
+};
+
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
@@ -55,7 +73,6 @@ router.post('/login', async (req, res) => {
 });
 
 // Fetch playgrounds, Handle POST requests to the '/playgrounds' endpoint
-
 router.post('/playgrounds', async (req, res) => {
   const { latitude, longitude, travelTime } = req.body;
 
@@ -156,36 +173,38 @@ router.post('/playgrounds', async (req, res) => {
   }
 });
 
-//route for saving playgrounds, creating folders, and retrieving saved playgrounds
+// Create a new folder (protected)
+router.post('/folders', authenticateToken, async (req, res) => {
+  const { name } = req.body;
 
-router.post('/folders', async (req, res) => {
-  const { userId, name } = req.body;
   try {
-      const folder = await Folder.create({ user_id: userId, name });
-      res.status(201).json(folder);
+    const folder = await Folder.create({ user_id: req.user.userId, name });
+    res.status(201).json(folder);
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 });
 
-router.post('/playgrounds/save', async (req, res) => { // Ensure this is marked as async
-  console.log('POST /playgrounds/save called');
-  console.log('Request body:', req.body);
-
+// Save a playground to a folder (protected)
+router.post('/playgrounds/save', authenticateToken, async (req, res) => {
   const { folderId, playground } = req.body;
 
   try {
-    // Check if the playground already exists in the database based on name and location
-    let existingPlayground = await Playground.findOne({ 
-      where: { 
+    const folder = await Folder.findOne({ where: { id: folderId, user_id: req.user.userId } });
+
+    if (!folder) {
+      return res.status(403).json({ error: 'Forbidden: You do not own this folder' });
+    }
+
+    let existingPlayground = await Playground.findOne({
+      where: {
         name: playground.name,
         latitude: playground.geometry.location.lat,
         longitude: playground.geometry.location.lng
-      } 
+      }
     });
 
     if (!existingPlayground) {
-      // Create the playground in the database if it doesn't exist
       existingPlayground = await Playground.create({
         name: playground.name,
         latitude: playground.geometry.location.lat,
@@ -194,7 +213,6 @@ router.post('/playgrounds/save', async (req, res) => { // Ensure this is marked 
       });
     }
 
-    // Create association between folder and playground
     await FolderPlaygrounds.create({
       folder_id: folderId,
       playground_id: existingPlayground.id
@@ -207,27 +225,76 @@ router.post('/playgrounds/save', async (req, res) => { // Ensure this is marked 
   }
 });
 
-router.get('/folders/:userId', async (req, res) => {
+// Fetch folders for a specific user (protected)
+router.get('/folders/:userId', authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-  console.log(`Fetching folders for user ID: ${userId}`);  // Add this log
+
+  if (req.user.userId !== parseInt(userId)) {
+    return res.sendStatus(403); // Forbidden: User ID in token does not match requested user ID
+  }
 
   try {
     const folders = await Folder.findAll({
       where: { user_id: userId },
       include: [{ model: sequelize.models.Playground, as: 'playgrounds' }]
-  });
-      console.log(`Found folders: ${JSON.stringify(folders)}`);  // Add this log
-      res.status(200).json(folders);
+    });
+    res.status(200).json(folders);
   } catch (error) {
-      console.error('Error fetching folders:', error);  // Add this log
-      res.status(500).json({ error: 'Error fetching folders' });
+    console.error('Error fetching folders:', error);
+    res.status(500).json({ error: 'Error fetching folders' });
   }
 });
 
+// Delete a folder (protected)
+router.delete('/folders/:folderId', authenticateToken, async (req, res) => {
+  const folderId = req.params.folderId;
 
+  try {
+    const folder = await Folder.findOne({ where: { id: folderId, user_id: req.user.userId } });
 
+    if (!folder) {
+      return res.status(403).json({ error: 'Forbidden: You do not own this folder' });
+    }
 
+    await FolderPlaygrounds.destroy({ where: { folder_id: folderId } });
+    await folder.destroy();
 
+    res.status(200).json({ message: 'Folder deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting folder:', error);
+    res.status(500).json({ error: 'Failed to delete folder' });
+  }
+});
 
+// Delete a playground from a folder (protected)
+router.delete('/folders/:folderId/playgrounds/:playgroundId', authenticateToken, async (req, res) => {
+  const { folderId, playgroundId } = req.params;
+
+  try {
+    const folder = await Folder.findOne({ where: { id: folderId, user_id: req.user.userId } });
+
+    if (!folder) {
+      return res.status(403).json({ error: 'Forbidden: You do not own this folder' });
+    }
+
+    const association = await FolderPlaygrounds.findOne({
+      where: {
+        folder_id: folderId,
+        playground_id: playgroundId,
+      }
+    });
+
+    if (!association) {
+      return res.status(404).json({ error: 'Association not found' });
+    }
+
+    await association.destroy();
+
+    res.status(200).json({ message: 'Playground removed from folder successfully' });
+  } catch (error) {
+    console.error('Error removing playground from folder:', error);
+    res.status(500).json({ error: 'Failed to remove playground from folder' });
+  }
+});
 
 module.exports = router;

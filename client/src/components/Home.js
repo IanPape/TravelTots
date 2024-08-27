@@ -30,13 +30,18 @@ const Home = () => {
   useEffect(() => {
     const userId = getUserIdFromToken();
     if (userId) {
-      axios.get(`http://localhost:5000/api/folders/${userId}`)
-        .then(response => {
-          setFolders(response.data || []);
-        })
-        .catch(error => {
-          console.error('Error fetching folders:', error);
-        });
+      const token = localStorage.getItem('token'); // Get the token from localStorage
+      axios.get(`http://localhost:5000/api/folders/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      .then(response => {
+        setFolders(response.data || []);
+      })
+      .catch(error => {
+        console.error('Error fetching folders:', error);
+      });
     }
   }, []);
 
@@ -69,6 +74,7 @@ const Home = () => {
       console.error('Error fetching playgrounds:', error);
     }
   };
+
   const handleSavePlayground = (playground) => {
     console.log('Playground:', playground);
     console.log('Selected Folder:', selectedFolder);
@@ -81,18 +87,24 @@ const Home = () => {
       alert('Please select a folder to save the playground.');
       return;
     }
-  
+
+    const token = localStorage.getItem('token'); // Get the token from localStorage
     axios.post('http://localhost:5000/api/playgrounds/save', { 
       folderId: selectedFolder, 
       playground: playground  // Send the entire playground object
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     })
-      .then(() => {
-        alert('Playground saved successfully!');
-      })
-      .catch(error => {
-        console.error('Error saving playground:', error);
-      });
+    .then(() => {
+      alert('Playground saved successfully!');
+    })
+    .catch(error => {
+      console.error('Error saving playground:', error);
+    });
   };
+
   const getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -118,9 +130,7 @@ const Home = () => {
 
   return (
     <div className="container">
-     
       <h1>Find Play Spots!</h1>
-      
       <form 
         className="mb-4"
         onSubmit={(e) => {
@@ -153,28 +163,27 @@ const Home = () => {
       </form>
       
       <div className="saved-playgrounds">
-      
-      <ul className="list-group">
-  {playgrounds.map((pg, index) => {
-    console.log('Playground object:', pg); // Log the entire pg object
-    return (
-      <li key={index} className="list-group-item">
-        <h5>{pg.name}</h5>
-        <p>{pg.travelTime} minutes away - <a href={pg.mapsLink} target="_blank" rel="noopener noreferrer">{pg.address} Open in Google Maps!</a></p>
-        <button onClick={() => handleSavePlayground(pg)} className="btn btn-secondary">Save to Folder</button> {/* Save button */}
-        <select
-          value={selectedFolder}
-          onChange={(e) => setSelectedFolder(e.target.value)}
-        >
-          <option value="">Select a folder</option>
-          {folders.map(folder => (
-            <option key={folder.id} value={folder.id}>{folder.name}</option>
-          ))}
-        </select>
-      </li>
-    );
-  })}
-</ul>
+        <ul className="list-group">
+          {playgrounds.map((pg, index) => {
+            console.log('Playground object:', pg); // Log the entire pg object
+            return (
+              <li key={index} className="list-group-item">
+                <h5>{pg.name}</h5>
+                <p>{pg.travelTime} minutes away - <a href={pg.mapsLink} target="_blank" rel="noopener noreferrer">{pg.address} Open in Google Maps!</a></p>
+                <button onClick={() => handleSavePlayground(pg)} className="btn btn-secondary">Save to Folder</button> {/* Save button */}
+                <select
+                  value={selectedFolder}
+                  onChange={(e) => setSelectedFolder(e.target.value)}
+                >
+                  <option value="">Select a folder</option>
+                  {folders.map(folder => (
+                    <option key={folder.id} value={folder.id}>{folder.name}</option>
+                  ))}
+                </select>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </div>
   );

@@ -286,3 +286,36 @@ label {
   background-color: #45A049; /* Darker green on hover */
   transform: translateY(-3px); /* Lift effect on hover */
 }
+
+.btn-delete-folder {
+  margin-left: 10px;
+  background-color: rgb(216, 80, 80);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px; /* Add this line for rounded edges */
+}
+
+.btn-delete-folder:hover {
+  background-color: darkred;
+}
+
+.playground-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-delete-playground {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-delete-playground:hover {
+  color: darkred;
+}
+

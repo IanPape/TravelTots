@@ -231,11 +231,13 @@ router.post('/playgrounds/save', authenticateToken, async (req, res) => {
 // Fetch folders for a specific user (protected)
 router.get('/folders/:userId', authenticateToken, async (req, res) => {
   const userId = req.params.userId;
+  console.log('User ID from JWT:', req.user.userId); // Add this line
+  console.log('User ID from params:', userId); // Add this line
 
   if (req.user.userId !== parseInt(userId)) {
     return res.sendStatus(403); // Forbidden: User ID in token does not match requested user ID
   }
-
+  
   try {
     const folders = await Folder.findAll({
       where: { user_id: userId },

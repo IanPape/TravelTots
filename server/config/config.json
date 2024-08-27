@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "postgres.zpabhnhcdcthukymnpog",
     "password": "traveltots_dbpassword!",
     "database": "postgres",
     "host": "aws-0-us-east-2.pooler.supabase.com",
@@ -8,7 +8,7 @@
     "dialect": "postgres"
   },
   "test": {
-    "username": "postgres",
+    "username": "postgres.zpabhnhcdcthukymnpog",
     "password": "traveltots_dbpassword!",
     "database": "postgres",
     "host": "aws-0-us-east-2.pooler.supabase.com",
@@ -16,7 +16,7 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "postgres",
+    "username": "postgres.zpabhnhcdcthukymnpog",
     "password": "traveltots_dbpassword!",
     "database": "postgres",
     "host": "aws-0-us-east-2.pooler.supabase.com",

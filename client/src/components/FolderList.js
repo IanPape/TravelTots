@@ -7,7 +7,7 @@ const FolderList = () => {
 
   useEffect(() => {
     const userId = /* logic to get user ID */;
-    axios.get(`http://localhost:5000/api/folders/${userId}`)
+    axios.get(`https://traveltotsbackend.onrender.com/api/folders/${userId}`)
       .then(response => setFolders(response.data))
       .catch(error => console.error('Error fetching folders:', error));
   }, []);

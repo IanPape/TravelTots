@@ -13,18 +13,16 @@ const Login = ({ setToken }) => {
     try {
       const trimmedPassword = password.trim();
       console.log('Attempting login with:', { username, trimmedPassword });
-
+  
       const response = await axios.post('https://traveltotsbackend.onrender.com/api/login', { username, password: trimmedPassword });
-
+  
       console.log('Login successful:', response.data);
-
+  
       const token = response.data.token;
       setToken(token);
-
-      // Store the token in local storage
+  
       localStorage.setItem('token', token);
-
-      // Redirect to homepage after successful login
+  
       navigate('/home');
     } catch (error) {
       if (error.response) {
@@ -34,6 +32,7 @@ const Login = ({ setToken }) => {
       }
     }
   };
+  
 
   return (
     <div className="login">

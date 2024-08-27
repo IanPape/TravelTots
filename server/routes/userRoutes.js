@@ -41,14 +41,12 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// User login
 router.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     console.log(`Attempting to log in user: ${username}`);
-    const trimmedPassword = password.trim();
-    console.log('Trimmed password during login:', trimmedPassword);
 
+    // Assuming username is used to find the user
     const user = await User.findOne({ where: { username } });
     if (!user) {
       console.log('User not found');
@@ -57,20 +55,25 @@ router.post('/login', async (req, res) => {
 
     console.log('Stored hashed password:', user.password);
 
-    const isPasswordValid = await bcrypt.compare(trimmedPassword, user.password);
+    const isPasswordValid = await bcrypt.compare(password.trim(), user.password);
     console.log('Password comparison result:', isPasswordValid);
+
     if (!isPasswordValid) {
       console.log('Invalid password');
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log('Generated token:', token);
+    
+    return res.json({ token });
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(400).json({ error: error.message });
+    console.error('Login error:', error);
+    return res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Fetch playgrounds, Handle POST requests to the '/playgrounds' endpoint
 router.post('/playgrounds', async (req, res) => {

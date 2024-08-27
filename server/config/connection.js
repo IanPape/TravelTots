@@ -2,13 +2,9 @@
 
 const { Sequelize } = require('sequelize');
 
-// Configure your database connection here
-const sequelize = new Sequelize({
+// Use your Supabase database connection string
+const sequelize = new Sequelize('postgresql://postgres:traveltots_dbpassword!@aws-0-us-east-2.pooler.supabase.com:6543/postgres', {
   dialect: 'postgres',
-  host: 'localhost', // Your database host
-  username: 'ian', // Your database username
-  password: '', // Your database password
-  database: 'traveltots_db', // Your database name
   logging: false // Disable logging if you prefer
 });
 

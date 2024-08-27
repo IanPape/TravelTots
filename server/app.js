@@ -3,14 +3,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-
-
 const { Folder, Playground } = require('./models');
 
 const app = express();
 
 // Middleware
-app.use(cors());
+
+// Enable CORS for all routes and origins
+// In production, you might want to restrict this to specific origins for security reasons
+app.use(cors({
+  origin: 'https://traveltots.onrender.com', // Replace with your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+  credentials: true // If you're dealing with cookies or authentication, this might be necessary
+}));
+
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 

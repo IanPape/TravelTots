@@ -75,7 +75,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
 // Fetch playgrounds, Handle POST requests to the '/playgrounds' endpoint
 router.post('/playgrounds', async (req, res) => {
   const { latitude, longitude, travelTime } = req.body;
@@ -232,8 +231,8 @@ router.post('/playgrounds/save', authenticateToken, async (req, res) => {
 // Fetch folders for a specific user (protected)
 router.get('/folders/:userId', authenticateToken, async (req, res) => {
   const userId = req.params.userId;
-  console.log('User ID from JWT:', req.user.userId); // Add this line
-  console.log('User ID from params:', userId); // Add this line
+  console.log('User ID from JWT:', req.user.userId); // Log the user ID from JWT
+  console.log('User ID from params:', userId); // Log the user ID from params
 
   if (req.user.userId !== parseInt(userId)) {
     return res.sendStatus(403); // Forbidden: User ID in token does not match requested user ID

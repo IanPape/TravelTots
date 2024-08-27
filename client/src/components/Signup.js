@@ -14,7 +14,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/register', { username, email, password });
+      const response = await axios.post('https://traveltotsbackend.onrender.com/api/register', { username, email, password });
       console.log('Registration successful:', response.data); // Debugging line
       navigate('/login'); // Redirect to login page
     } catch (error) {

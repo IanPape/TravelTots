@@ -37,7 +37,7 @@ const SavedPlaygrounds = () => {
     }
 
     const token = localStorage.getItem('token'); // Get the token from localStorage
-    axios.get(`http://localhost:5000/api/folders/${userId}`, {
+    axios.get(`https://traveltotsbackend.onrender.com/api/folders/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -58,7 +58,7 @@ const SavedPlaygrounds = () => {
   const handleFolderDeleted = (folderId) => {
     const token = localStorage.getItem('token'); // Get the token from localStorage
   
-    axios.delete(`http://localhost:5000/api/folders/${folderId}`, {
+    axios.delete(`https://traveltotsbackend.onrender.com/api/folders/${folderId}`, {
       headers: {
         Authorization: `Bearer ${token}` // Include the token in the request headers
       }
@@ -75,7 +75,7 @@ const SavedPlaygrounds = () => {
   const handlePlaygroundDeleted = (folderId, playgroundId) => {
     const token = localStorage.getItem('token'); // Get the token from localStorage
   
-    axios.delete(`http://localhost:5000/api/folders/${folderId}/playgrounds/${playgroundId}`, {
+    axios.delete(`https://traveltotsbackend.onrender.com/api/folders/${folderId}/playgrounds/${playgroundId}`, {
       headers: {
         Authorization: `Bearer ${token}` // Include the token in the request headers
       }

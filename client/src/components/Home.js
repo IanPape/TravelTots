@@ -31,7 +31,7 @@ const Home = () => {
     const userId = getUserIdFromToken();
     if (userId) {
       const token = localStorage.getItem('token'); // Get the token from localStorage
-      axios.get(`http://localhost:5000/api/folders/${userId}`, {
+      axios.get(`https://traveltotsbackend.onrender.com/api/folders/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -53,7 +53,7 @@ const Home = () => {
       let pageToken = '';
   
       while (hasMore) {
-        const response = await axios.post('http://localhost:5000/api/playgrounds', {
+        const response = await axios.post('https://traveltotsbackend.onrender.com/api/playgrounds', {
           latitude,
           longitude,
           travelTime,
@@ -89,7 +89,7 @@ const Home = () => {
     }
 
     const token = localStorage.getItem('token'); // Get the token from localStorage
-    axios.post('http://localhost:5000/api/playgrounds/save', { 
+    axios.post('https://traveltotsbackend.onrender.com/api/playgrounds/save', { 
       folderId: selectedFolder, 
       playground: playground  // Send the entire playground object
     }, {

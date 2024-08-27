@@ -21,7 +21,7 @@ const PlaygroundPage = () => {
 
   useEffect(() => {
     if (location.latitude && location.longitude) {
-      axios.post('http://localhost:5000/playgrounds', {
+      axios.post('https://traveltotsbackend.onrender.com/playgrounds', {
         latitude: location.latitude,
         longitude: location.longitude,
         travelTime: '30'

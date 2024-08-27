@@ -1,11 +1,9 @@
-// config/connection.js
-
 const { Sequelize } = require('sequelize');
 
-// Use your Supabase database connection string
-const sequelize = new Sequelize('postgresql://postgres:traveltots_dbpassword!@aws-0-us-east-2.pooler.supabase.com:6543/postgres', {
+// Get the database URL from environment variables
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: 'postgres',
-  logging: false // Disable logging if you prefer
+  logging: false, // Disable logging if you prefer
 });
 
 module.exports = sequelize;

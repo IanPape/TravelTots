@@ -21,6 +21,7 @@ const authenticateToken = (req, res, next) => {
       return res.sendStatus(403); // Forbidden
     }
     req.user = user; // Attach the decoded user info to the request object
+    req.user.userId = user.id; // Ensure userId is correctly set
     next();
   });
 };

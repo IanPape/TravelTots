@@ -19,7 +19,7 @@ const CreateFolder = ({ onFolderCreated, onFolderDeleted }) => {
     }
   };
 
-  cconst getUserIdFromToken = () => {
+  const getUserIdFromToken = () => {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = parseJwt(token);

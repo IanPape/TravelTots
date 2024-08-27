@@ -109,11 +109,10 @@ const Home = () => {
     const token = localStorage.getItem('token');
     if (token) {
       const decodedToken = parseJwt(token);
-      return decodedToken ? decodedToken.userId : null;
+      return decodedToken ? decodedToken.id : null; // Use 'id' instead of 'userId'
     }
     return null;
   };
-
   const parseJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];

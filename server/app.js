@@ -10,12 +10,24 @@ const app = express();
 // Middleware
 
 // Enable CORS for all routes and origins
-// In production, you might want to restrict this to specific origins for security reasons
 app.use(cors({
-  origin: 'https://traveltots.onrender.com', // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-  credentials: true // If you're dealing with cookies or authentication, this might be necessary
+  origin: 'https://traveltots.onrender.com', // Your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Specify allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify allowed headers
+  credentials: true // Necessary if you're dealing with cookies or authentication
 }));
+
+// Additional CORS headers in case iOS requires them
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://traveltots.onrender.com');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // Handle preflight requests for CORS
+  }
+  next();
+});
 
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));

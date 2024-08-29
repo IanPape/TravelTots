@@ -22,8 +22,27 @@ const Home = () => {
         },
         (error) => {
           console.error('Error fetching geolocation:', error);
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert('Permission to access location was denied. Please enable location services to use this feature.');
+              break;
+            case error.POSITION_UNAVAILABLE:
+              alert('Location information is unavailable.');
+              break;
+            case error.TIMEOUT:
+              alert('The request to get your location timed out. Please try again.');
+              break;
+            case error.UNKNOWN_ERROR:
+              alert('An unknown error occurred while trying to fetch your location.');
+              break;
+            default:
+              alert('An error occurred while trying to fetch your location.');
+          }
         }
       );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      alert('Geolocation is not supported by your browser. Please use a different browser or device to use this feature.');
     }
   }, []);
 

@@ -24,25 +24,31 @@ const Home = () => {
           console.error('Error fetching geolocation:', error);
           switch (error.code) {
             case error.PERMISSION_DENIED:
-              alert('Permission to access location was denied. Please enable location services to use this feature.');
+              alert(
+                'Location access is denied. To enable it:\n\n' +
+                '1. Open Settings.\n' +
+                '2. Go to Privacy > Location Services.\n' +
+                '3. Ensure Location Services is ON.\n' +
+                '4. Find your browser (Safari, Chrome, etc.) and set location access to "While Using" or "Always".'
+              );
               break;
             case error.POSITION_UNAVAILABLE:
-              alert('Location information is unavailable.');
+              alert('Location unavailable. Please try again later.');
               break;
             case error.TIMEOUT:
-              alert('The request to get your location timed out. Please try again.');
+              alert('Location request timed out. Please try again.');
               break;
             case error.UNKNOWN_ERROR:
-              alert('An unknown error occurred while trying to fetch your location.');
+              alert('An error occurred. Please try again.');
               break;
             default:
-              alert('An error occurred while trying to fetch your location.');
+              alert('An error occurred while fetching your location.');
           }
         }
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
-      alert('Geolocation is not supported by your browser. Please use a different browser or device to use this feature.');
+      alert('Geolocation is not supported by your browser. Please use a different browser or device.');
     }
   }, []);
 
